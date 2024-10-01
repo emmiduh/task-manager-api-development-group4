@@ -5,6 +5,7 @@ import com.fall2024devops.taskmanager.common.exception.UnauthorizedException;
 import com.fall2024devops.taskmanager.common.utils.SecurityUtils;
 import com.fall2024devops.taskmanager.tasks.dto.CreateTaskDTO;
 import com.fall2024devops.taskmanager.tasks.dto.ListTasksDTO;
+import com.fall2024devops.taskmanager.tasks.dto.TaskDTO.TaskDTOOutput;
 import com.fall2024devops.taskmanager.tasks.dto.UpdateTaskDTO;
 import com.fall2024devops.taskmanager.tasks.entity.Task;
 import com.fall2024devops.taskmanager.tasks.repository.TaskRepository;
@@ -78,13 +79,13 @@ public class TaskService {
                 .collect(Collectors.toList());
     }
 
-    public UpdateTaskDTO.Output updateTask(Long id, UpdateTaskDTO.Input input) {
+    public UpdateTaskDTO.Output updateTask(Long id, TaskDTOOutput taskDto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task not found"));
 
-        task.setTitle(input.getTitle());
-        task.setDescription(input.getDescription());
-        task.setStatus(input.getStatus());
+        task.setTitle(taskDto.getTitle());
+        task.setDescription(taskDto.getDescription());
+        task.setStatus(taskDto.getStatus());
 
         Task updatedTask = taskRepository.save(task);
 
@@ -104,4 +105,6 @@ public class TaskService {
                 .orElseThrow(() -> new NotFoundException("Task not found"));
         taskRepository.delete(task);
     }
+
+    // Removed duplicate updateTask method
 }
