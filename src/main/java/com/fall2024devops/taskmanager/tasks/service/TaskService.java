@@ -4,8 +4,10 @@ import com.fall2024devops.taskmanager.common.exception.NotFoundException;
 import com.fall2024devops.taskmanager.common.exception.UnauthorizedException;
 import com.fall2024devops.taskmanager.common.utils.SecurityUtils;
 import com.fall2024devops.taskmanager.tasks.dto.CreateTaskDTO;
-import com.fall2024devops.taskmanager.tasks.dto.ListTaskDTO;
+import com.fall2024devops.taskmanager.tasks.dto.ListTasksDTO;
 import com.fall2024devops.taskmanager.tasks.dto.TaskDTO;
+import com.fall2024devops.taskmanager.tasks.dto.TaskDTO.TaskDTOOutput;
+import com.fall2024devops.taskmanager.tasks.dto.UpdateTaskDTO;
 import com.fall2024devops.taskmanager.tasks.entity.Task;
 import com.fall2024devops.taskmanager.tasks.repository.TaskRepository;
 import com.fall2024devops.taskmanager.user.entity.User;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class TaskService {
 
-    private final TaskRepository taskRepository;
+     private final TaskRepository taskRepository;
 
     @Autowired
     public TaskService(TaskRepository taskRepository) {
@@ -53,11 +55,10 @@ public class TaskService {
                 savedTask.getDeletedAt()
         );
     }
-    /* Mark: This was previously named getTasksById but it only returned one task.
-     So I've revised it's name to match its output */
-    public ListTaskDTO.Output getTaskById(Long id) {
+
+    public ListTasksDTO.Output getTaskById(Long id) {
         Task foundTask = taskRepository.findById(id).orElseThrow(() -> new NotFoundException("Task not found"));
-        return new ListTaskDTO.Output(
+        return new ListTasksDTO.Output(
                 foundTask.getId(),
                 foundTask.getTitle(),
                 foundTask.getDescription(),
@@ -68,22 +69,48 @@ public class TaskService {
         );
     }
 
-    public List<TaskDTO.Output> getAllTasks(){
-        List<Task> foundTasks = taskRepository.findAll();
-        List<TaskDTO.Output> outputTasks = new ArrayList<>();
-        for(Task task : foundTasks){
-            outputTasks.add(new TaskDTO.Output(
-                    task.getId(),
-                    task.getTitle(),
-                    task.getDescription(),
-                    task.getStatus(),
-                    task.getUser().getId(),
-                    task.getCreatedAt(),
-                    task.getUpdatedAt()
-            ));
-        }
-
-        return outputTasks;
+    public List<ListTasksDTO.Output> getAllTasks() {
+        List<Task> tasks = taskRepository.findAll();
+        return tasks.stream()
+                .map(task -> new ListTasksDTO.Output(
+                        task.getId(),
+                        task.getTitle(),
+                        task.getDescription(),
+                        task.getStatus(),
+                        task.getUser().getId(),
+                        task.getCreatedAt(),
+                        task.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
     }
+
+    public UpdateTaskDTO.Output updateTask(Long id, TaskDTOOutput taskDto) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Task not found"));
+
+        task.setTitle(taskDto.getTitle());
+        task.setDescription(taskDto.getDescription());
+        task.setStatus(taskDto.getStatus());
+
+        Task updatedTask = taskRepository.save(task);
+
+        return new UpdateTaskDTO.Output(
+                updatedTask.getId(),
+                updatedTask.getTitle(),
+                updatedTask.getDescription(),
+                updatedTask.getStatus(),
+                updatedTask.getUser().getId(),
+                updatedTask.getCreatedAt(),
+                updatedTask.getUpdatedAt()
+        );
+    }
+
+    public void deleteTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Task not found"));
+        taskRepository.delete(task);
+    }
+
+    // Removed duplicate updateTask method
 
 }

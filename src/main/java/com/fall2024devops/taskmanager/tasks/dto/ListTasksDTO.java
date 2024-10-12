@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public class ListTaskDTO {
+public class ListTasksDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
