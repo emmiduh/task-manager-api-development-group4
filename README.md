@@ -57,12 +57,17 @@
 
 4. Alternatively, you can run the `TaskManagerApp` class directly from IntelliJ IDEA.
 
-## Containerising the application
+## 6. Containerising the application
 1. Run the application using the following to build and create containers for the app and the db
      ```
      docker-compose up -d
      ```
 
+## 7. Running the tests
+1. Run the test using the following command:
+     ```
+     ./mvnw test
+     ```
 
 ## Additional Information
 
