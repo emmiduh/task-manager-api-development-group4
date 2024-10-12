@@ -1,6 +1,6 @@
-package com.fall2024devops.taskmanager.tasks.controller;
+package com.fall2024devops.taskmanager;
 
-import com.fall2024devops.taskmanager.common.response.GenericResponse;
+import com.fall2024devops.taskmanager.tasks.controller.TaskController;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import com.fall2024devops.taskmanager.tasks.dto.CreateTaskDTO;
 import com.fall2024devops.taskmanager.tasks.dto.ListTasksDTO;
@@ -19,14 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
