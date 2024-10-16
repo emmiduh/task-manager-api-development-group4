@@ -1,7 +1,6 @@
 package com.fall2024devops.taskmanager.common.filters;
 
 import com.fall2024devops.taskmanager.common.services.JwtService;
-import com.fall2024devops.taskmanager.auth.repository.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +23,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
 
     @Override
     protected void doFilterInternal(
